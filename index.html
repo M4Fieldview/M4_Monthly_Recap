@@ -190,7 +190,6 @@
   </div>
   <div class="fun-cards" id="funCards"></div>
 </div>
-</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
@@ -304,6 +303,7 @@
       { label: 'Perf Pipe',  val: Math.round(sum('Perf Drainage Pipe (length)')),  color: '#f43f5e' },
       { label: 'Solid Pipe', val: Math.round(sum('Solid Drainage Pipe (length)')), color: '#fb923c' },
     ]);
+    buildWaffle(rows, hdrs);
   }
 
 
