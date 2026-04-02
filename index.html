@@ -260,9 +260,15 @@
     const total = segments.reduce((t, d) => t + d.val, 0);
     chartInstances[id] = new Chart(document.getElementById(id), {
       type: 'doughnut',
-      data: { labels: segments.map(d => d.label), datasets: [{ data: segments.map(d => d.val), backgroundColor: segments.map(d => d.color), borderColor: '#14120d', borderWidth: 3, hoverOffset: 10 }] },
+      data: { labels: segments.map(d => d.label), datasets: [{ data: segments.map(d => d.val), backgroundColor: segments.map(d => d.color), borderColor: '#14120d', borderWidth: 3, hoverOffset: 10, topJobsList: segments.map(d => d.topJobs || []) }] },
       options: { responsive: true, maintainAspectRatio: false, cutout: '68%',
-        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw.toLocaleString()} (${total ? Math.round(ctx.raw/total*100) : 0}%)` } } } }
+        plugins: { legend: { display: false }, tooltip: { callbacks: {
+          label: ctx => ` ${ctx.label}: ${ctx.raw.toLocaleString()} (${total ? Math.round(ctx.raw/total*100) : 0}%)`,
+          afterLabel: ctx => {
+            const jobs = ctx.dataset.topJobsList[ctx.dataIndex] || [];
+            return jobs.length ? ['', ' Top Jobs:'].concat(jobs.map(j => `  ${j.job}: ${j.val.toLocaleString()}`)) : [];
+          }
+        } } } }
     });
     const el = document.getElementById(legendId);
     el.innerHTML = segments.map(d => `<span><span class="legend-swatch" style="background:${d.color}"></span>${d.label}: <strong style="color:var(--text)">${d.val.toLocaleString()}</strong></span>`).join('');
@@ -282,19 +288,24 @@
     });
     const jobRows = Object.values(jobTotals);
     const sum = c => jobRows.reduce((t, r) => t + (r[c] || 0), 0);
+    const topJobs = (col, n = 3) => Object.entries(jobTotals)
+      .map(([job, r]) => ({ job, val: Math.round(r[col] || 0) }))
+      .filter(j => j.val > 0)
+      .sort((a, b) => b.val - a.val)
+      .slice(0, n);
 
     makeDonut('headChart', 'headLegend', [
-      { label: 'Rain Bird', val: Math.round(sum('Rain Bird Head')), color: '#3ecfcf' },
-      { label: 'Toro',      val: Math.round(sum('Toro_Head')),      color: '#f97316' },
-      { label: 'Hunter',    val: Math.round(sum('Hunter_Head')),    color: '#a855f7' },
+      { label: 'Rain Bird', val: Math.round(sum('Rain Bird Head')), color: '#3ecfcf', topJobs: topJobs('Rain Bird Head') },
+      { label: 'Toro',      val: Math.round(sum('Toro_Head')),      color: '#f97316', topJobs: topJobs('Toro_Head') },
+      { label: 'Hunter',    val: Math.round(sum('Hunter_Head')),    color: '#a855f7', topJobs: topJobs('Hunter_Head') },
     ]);
     makeDonut('pipeChart', 'pipeLegend', [
-      { label: 'Mainline', val: Math.round(sum('Mainline (length)')), color: '#3b82f6' },
-      { label: 'Lateral',  val: Math.round(sum('Lateral (length)')),  color: '#22d3ee' },
+      { label: 'Mainline', val: Math.round(sum('Mainline (length)')), color: '#3b82f6', topJobs: topJobs('Mainline (length)') },
+      { label: 'Lateral',  val: Math.round(sum('Lateral (length)')),  color: '#22d3ee', topJobs: topJobs('Lateral (length)') },
     ]);
     makeDonut('drainChart', 'drainLegend', [
-      { label: 'Perf Pipe',  val: Math.round(sum('Perf Drainage Pipe (length)')),  color: '#f43f5e' },
-      { label: 'Solid Pipe', val: Math.round(sum('Solid Drainage Pipe (length)')), color: '#fb923c' },
+      { label: 'Perf Pipe',  val: Math.round(sum('Perf Drainage Pipe (length)')),  color: '#f43f5e', topJobs: topJobs('Perf Drainage Pipe (length)') },
+      { label: 'Solid Pipe', val: Math.round(sum('Solid Drainage Pipe (length)')), color: '#fb923c', topJobs: topJobs('Solid Drainage Pipe (length)') },
     ]);
     buildWaffle(rows, hdrs);
   }
