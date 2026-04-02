@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Install Recap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #1a1610; --surface: #242018; --border: #3d3728;
+      --accent: #e8c97a; --accent2: #c8a85a; --text: #f0e8d8;
+      --muted: #8a7d68; --header-bg: #14120d;
+      --gap: 16px; --pad: 16px;
+    }
+    @media (min-width: 600px) { :root { --gap: 20px; --pad: 24px; } }
+    @media (min-width: 900px) { :root { --gap: 24px; --pad: 32px; } }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; min-height: 100vh; }
+    header { background: var(--header-bg); border-bottom: 2px solid var(--accent); padding: 14px var(--pad); display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+    header .logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--accent); white-space: nowrap; }
+    @media (min-width: 600px) { header .logo { font-size: 28px; } }
+    header .subtitle { color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; display: none; }
+    @media (min-width: 480px) { header .subtitle { display: block; } }
+    header .spacer { flex: 1; }
+    header .status { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent2); display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+    header .status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent2); animation: pulse 2s infinite; flex-shrink: 0; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .controls { padding: var(--gap) var(--pad); display: flex; gap: var(--gap); align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--border); background: var(--surface); }
+    select#monthSelect { background: var(--bg); border: 1px solid var(--accent); color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 9px 12px; border-radius: 6px; outline: none; cursor: pointer; letter-spacing: 0.5px; width: 100%; }
+    @media (min-width: 480px) { select#monthSelect { width: auto; } }
+    select#monthSelect:focus { border-color: var(--accent2); }
+
+    .charts-section { padding: var(--gap) var(--pad); display: flex; flex-direction: column; gap: var(--gap); }
+    .charts-grid { display: grid; grid-template-columns: 1fr; gap: var(--gap); }
+    @media (min-width: 600px) { .charts-grid { grid-template-columns: repeat(3, 1fr); } }
+    .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: var(--gap); }
+    .chart-title { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .donut-legend { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+    .donut-legend span { display: flex; align-items: center; gap: 7px; }
+    .legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+    .donut-wrap { position: relative; width: 100%; height: 260px; }
+    .bar-wrap { position: relative; width: 100%; height: 260px; }
+    .bar-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+    .bar-legend span { display: flex; align-items: center; gap: 6px; }
+    .table-section { padding: var(--gap) var(--pad) calc(var(--gap) * 2); }
+    .table-wrap { overflow-x: auto; overflow-y: auto; max-height: 60vh; border-radius: 10px; border: 1px solid var(--border); }
+    table { border-collapse: collapse; width: max-content; min-width: 100%; }
+    thead { position: sticky; top: 0; z-index: 10; }
+    thead th { background: var(--header-bg); border-bottom: 2px solid var(--accent); border-right: 1px solid var(--border); padding: 10px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); white-space: nowrap; cursor: pointer; user-select: none; transition: background 0.15s; }
+    thead th:hover { background: #1e2333; }
+    thead th.sorted-asc::after { content: ' ↑'; color: var(--accent2); }
+    thead th.sorted-desc::after { content: ' ↓'; color: var(--accent2); }
+    thead th:nth-child(1), tbody td:nth-child(1) { position: sticky; left: 0; z-index: 5; background: var(--header-bg); border-right: 2px solid var(--accent); min-width: 120px; }
+    thead th:nth-child(2), tbody td:nth-child(2) { position: sticky; left: 120px; z-index: 5; background: var(--header-bg); border-right: 1px solid var(--border); min-width: 160px; }
+    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr:hover td { background: #2e2a1e !important; }
+    tbody tr:nth-child(even) td { background: #1e1c14; }
+    tbody td { padding: 9px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text); white-space: nowrap; border-right: 1px solid var(--border); background: var(--bg); }
+    tbody td.has-value { color: var(--accent2); font-weight: 600; }
+    tbody td.length-value { color: #f0a03a; font-weight: 600; }
+    .state-msg { padding: 60px 32px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--muted); }
+    .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 10px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .table-wrap::-webkit-scrollbar { width: 6px; height: 6px; }
+    .table-wrap::-webkit-scrollbar-track { background: var(--bg); }
+    .table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* ANALYTICS SECTION */
+    .analytics-section { padding: 0 var(--pad) calc(var(--gap) * 3); display: flex; flex-direction: column; gap: var(--gap); }
+    .analytics-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px; color: var(--accent); margin-bottom: 4px; }
+    .analytics-subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    .stat-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+    @media (min-width: 600px) { .stat-cards { grid-template-columns: repeat(4, 1fr); } }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: var(--gap); display: flex; flex-direction: column; gap: 4px; border-left-width: 3px; }
+
+
+    .stat-card .stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: var(--text); line-height: 1; margin: 2px 0; }
+    .stat-card .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; }
+    .stat-card .stat-sub { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); line-height: 1.5; }
+    .fun-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+    @media (max-width: 600px) { .fun-cards { grid-template-columns: 1fr; } }
+    .fun-card { border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; border: none; }
+    .fun-card .fun-visual { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 100px; line-height: 1; position: relative; }
+    .fun-card.earth .fun-visual  { background: #1a1408; border-bottom: 2px solid #e8c97a; }
+    .fun-card.moon  .fun-visual  { background: #161008; border-bottom: 2px solid #d4a86a; }
+    .fun-card.water .fun-visual  { background: #120e06; border-bottom: 2px solid #c8a85a; }
+    .fun-card.beach .fun-visual  { background: #201808; border-bottom: 2px solid #b89048; }
+    .fun-card .fun-visual .fun-glow { position: absolute; width: 160px; height: 160px; border-radius: 50%; opacity: 0.12; }
+    .fun-card.earth .fun-glow  { background: #e8c97a; }
+    .fun-card.moon  .fun-glow  { background: #d4a86a; }
+    .fun-card.water .fun-glow  { background: #c8a85a; }
+    .fun-card.beach .fun-glow  { background: #b89048; }
+    .fun-card .fun-emoji { position: relative; z-index: 1; }
+    .fun-card .fun-body { padding: 22px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .fun-card.earth .fun-body  { background: #1a160a; }
+    .fun-card.moon  .fun-body  { background: #18140f; }
+    .fun-card.water .fun-body  { background: #14110a; }
+    .fun-card.beach .fun-body  { background: #1c1508; }
+    .fun-card.earth .fun-number { color: #e8c97a; }
+    .fun-card.moon  .fun-number { color: #d4a86a; }
+    .fun-card.water .fun-number { color: #c8a85a; }
+    .fun-card.beach .fun-number { color: #b89048; }
+    .fun-card .fun-number { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 2px; line-height: 1; }
+    .fun-card .fun-headline { font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; font-weight: 600; color: #c8cfe0; line-height: 1.5; }
+    .fun-card .fun-detail { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4a5568; margin-top: 6px; letter-spacing: 0.3px; line-height: 1.6; }
+
+    #bubbleViz { background: var(--bg); border-radius: 8px; }
+    .bubble-item { position: absolute; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: default; transition: transform 0.2s; overflow: hidden; }
+    .bubble-item:hover { transform: scale(1.06); z-index: 10; }
+    .bubble-label { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; color: #fff; line-height: 1.1; pointer-events: none; }
+    .bubble-value { font-family: 'IBM Plex Mono', monospace; color: rgba(255,255,255,0.8); line-height: 1.2; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">INSTALL RECAP</div>
+    <div class="subtitle">Irrigation &amp; Landscape Project Data</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="status" id="statusEl"><div class="dot"></div><span>LOADING...</span></div>
+</header>
+
+<div class="controls">
+  <select id="monthSelect"></select>
+</div>
+
+<div class="charts-section">
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Sprinkler Heads</div>
+      <div class="donut-wrap"><canvas id="headChart"></canvas></div>
+      <div class="donut-legend" id="headLegend"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Mainline vs Lateral (ft)</div>
+      <div class="donut-wrap"><canvas id="pipeChart"></canvas></div>
+      <div class="donut-legend" id="pipeLegend"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Drainage Pipe (ft)</div>
+      <div class="donut-wrap"><canvas id="drainChart"></canvas></div>
+      <div class="donut-legend" id="drainLegend"></div>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Monthly Trend — Sprinkler Heads</div>
+    <div style="position:relative;width:100%;min-height:260px;height:260px;"><canvas id="trendHeadsChart" style="display:block;"></canvas></div>
+    <div class="bar-legend" id="trendHeadsLegend"></div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Monthly Trend — Pipe Footage</div>
+    <div style="position:relative;width:100%;min-height:260px;height:260px;"><canvas id="trendPipeChart" style="display:block;"></canvas></div>
+    <div class="bar-legend" id="trendPipeLegend"></div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Feature Area Breakdown</div>
+    <div id="bubbleViz" style="position:relative;width:100%;height:420px;overflow:hidden;"></div>
+    <div class="bar-legend" id="bubbleLegend" style="margin-top:12px;"></div>
+  </div>
+</div>
+
+<div class="analytics-section" id="analyticsSection" style="display:none; padding-top:0;">
+  <div>
+    <div class="analytics-title">By the Numbers</div>
+    <div class="analytics-subtitle">All time totals across all jobs &amp; months</div>
+  </div>
+  <div class="stat-cards">
+    <div class="stat-card" style="border-left:3px solid #3b82f6;">
+      <div class="stat-label">Total Pipe Laid</div>
+      <div class="stat-value" id="statTotalPipe">—</div>
+      <div class="stat-sub" id="statPipeSub"></div>
+    </div>
+    <div class="stat-card" style="border-left:3px solid #3ecfcf;">
+      <div class="stat-label">Total Heads Installed</div>
+      <div class="stat-value" id="statTotalHeads">—</div>
+      <div class="stat-sub" id="statHeadsSub"></div>
+    </div>
+    <div class="stat-card" style="border-left:3px solid #a855f7;">
+      <div class="stat-label">Best Month — Heads</div>
+      <div class="stat-value" id="statBestMonth">—</div>
+      <div class="stat-sub" id="statBestMonthSub"></div>
+    </div>
+    <div class="stat-card" style="border-left:3px solid #f97316;">
+      <div class="stat-label">Most Active Collector</div>
+      <div class="stat-value" id="statTopCollector">—</div>
+      <div class="stat-sub" id="statTopCollectorSub"></div>
+    </div>
+  </div>
+  <div class="fun-cards" id="funCards"></div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+
+  // ══════════════════════════════════════════════════════════════════
+  //  APPS SCRIPT URL — the only thing you ever need to change here.
+  //  This reads ALL sheet tabs automatically. Adding a new month =
+  //  just add a new tab in Google Sheets. No code changes needed.
+  // ══════════════════════════════════════════════════════════════════
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3HfojS0IWHRv6P4CWxHU9nqrZsVh23Mdem7-Kc4ZSXQsypNhdHuNvLwcVJMwQXKMy3w/exec';
+
+  let MONTHS = []; // populated automatically from Apps Script
+
+  // ── State ────────────────────────────────────────────────────────
+  let allMonthData = {};
+  let headers = [];
+  let allRows = [];
+  let sortCol = -1;
+  let sortDir = 1;
+  let chartInstances = {};
+  const LENGTH_KEYWORDS = ['length','pipe','trench','wire','cable','fence','centerline'];
+
+  // ── Fetch all sheets from Apps Script ───────────────────────────
+  async function fetchAllSheets() {
+    const res = await fetch(APPS_SCRIPT_URL);
+    if (!res.ok) throw new Error('Apps Script returned ' + res.status);
+    const data = await res.json();
+    // data = { "January 26": { headers: [...], rows: [[...],[...]] }, ... }
+    MONTHS = Object.keys(data).map(name => ({ label: name }));
+    MONTHS.forEach(m => {
+      const sheet = data[m.label];
+      allMonthData[m.label] = {
+        headers: sheet.headers.map(String),
+        rows: sheet.rows
+          .filter(r => r.some(c => c !== '' && c !== null && c !== undefined))
+          .map(r => r.map(c => (c === null || c === undefined) ? '' : String(c)))
+      };
+    });
+  }
+
+  // ── Build dropdown ───────────────────────────────────────────────
+  function buildDropdown() {
+    const loaded = MONTHS.filter(m => allMonthData[m.label]);
+    const sel = document.getElementById('monthSelect');
+    sel.innerHTML = '<option value="__all__">All Time</option>';
+    loaded.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m.label; opt.textContent = m.label;
+      sel.appendChild(opt);
+    });
+    sel.value = loaded[loaded.length - 1].label;
+    sel.addEventListener('change', () => switchView(sel.value));
+  }
+
+  // ── Switch month view ────────────────────────────────────────────
+  function switchView(key) {
+    const loaded = MONTHS.filter(m => allMonthData[m.label]);
+    if (key === '__all__') {
+      headers = allMonthData[loaded[0].label].headers;
+      allRows = loaded.flatMap(m => allMonthData[m.label].rows);
+    } else {
+      headers = allMonthData[key].headers;
+      allRows = allMonthData[key].rows;
+    }
+    sortCol = -1; sortDir = 1;
+    rebuildCharts(allRows, headers);
+  }
+
+  function renderTable(rows) {}
+  function applyFilters() {}
+
+  // ── Charts ───────────────────────────────────────────────────────
+  function makeDonut(id, legendId, segments) {
+    if (chartInstances[id]) { chartInstances[id].destroy(); }
+    const total = segments.reduce((t, d) => t + d.val, 0);
+    chartInstances[id] = new Chart(document.getElementById(id), {
+      type: 'doughnut',
+      data: { labels: segments.map(d => d.label), datasets: [{ data: segments.map(d => d.val), backgroundColor: segments.map(d => d.color), borderColor: '#14120d', borderWidth: 3, hoverOffset: 10 }] },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '68%',
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw.toLocaleString()} (${total ? Math.round(ctx.raw/total*100) : 0}%)` } } } }
+    });
+    const el = document.getElementById(legendId);
+    el.innerHTML = segments.map(d => `<span><span class="legend-swatch" style="background:${d.color}"></span>${d.label}: <strong style="color:var(--text)">${d.val.toLocaleString()}</strong></span>`).join('');
+  }
+
+  function rebuildCharts(rows, hdrs) {
+    const idx = n => hdrs.indexOf(n);
+    // Group rows by Job and sum each column — avoids double-counting multi-collector jobs
+    const jobIdx = idx('Job');
+    const jobTotals = {};
+    rows.forEach(r => {
+      const job = r[jobIdx] || 'Unknown';
+      if (!jobTotals[job]) jobTotals[job] = {};
+      hdrs.forEach((h, i) => {
+        jobTotals[job][h] = (jobTotals[job][h] || 0) + (parseFloat(r[i]) || 0);
+      });
+    });
+    const jobRows = Object.values(jobTotals);
+    const sum = c => jobRows.reduce((t, r) => t + (r[c] || 0), 0);
+
+    makeDonut('headChart', 'headLegend', [
+      { label: 'Rain Bird', val: Math.round(sum('Rain Bird Head')), color: '#3ecfcf' },
+      { label: 'Toro',      val: Math.round(sum('Toro_Head')),      color: '#f97316' },
+      { label: 'Hunter',    val: Math.round(sum('Hunter_Head')),    color: '#a855f7' },
+    ]);
+    makeDonut('pipeChart', 'pipeLegend', [
+      { label: 'Mainline', val: Math.round(sum('Mainline (length)')), color: '#3b82f6' },
+      { label: 'Lateral',  val: Math.round(sum('Lateral (length)')),  color: '#22d3ee' },
+    ]);
+    makeDonut('drainChart', 'drainLegend', [
+      { label: 'Perf Pipe',  val: Math.round(sum('Perf Drainage Pipe (length)')),  color: '#f43f5e' },
+      { label: 'Solid Pipe', val: Math.round(sum('Solid Drainage Pipe (length)')), color: '#fb923c' },
+    ]);
+  }
+
+
+  // ── Trend line chart (all months) ───────────────────────────────
+  function makeTrendLine(id, legendId, series, months) {
+    if (chartInstances[id]) { chartInstances[id].destroy(); }
+    const loaded = months || MONTHS.filter(m => allMonthData[m.label]);
+    const monthLabels = loaded.map(m => m.label);
+    const datasets = series.map(s => {
+      const data = loaded.map(m => {
+        const d = allMonthData[m.label];
+        if (!d) return 0;
+        const i = d.headers.indexOf(s.col);
+        const jobI = d.headers.indexOf('Job');
+        if (i < 0) return 0;
+        // Group by job then sum to avoid double-counting collectors
+        const jobSums = {};
+        d.rows.forEach(r => {
+          const job = r[jobI] || 'Unknown';
+          jobSums[job] = (jobSums[job] || 0) + (parseFloat(r[i]) || 0);
+        });
+        return Math.round(Object.values(jobSums).reduce((t, v) => t + v, 0));
+      });
+      return { label: s.label, data, borderColor: s.color, backgroundColor: s.color + '22',
+        borderWidth: 2, borderDash: s.dash || [], pointBackgroundColor: s.color,
+        pointRadius: 5, pointHoverRadius: 7, tension: 0.3, fill: false };
+    });
+    chartInstances[id] = new Chart(document.getElementById(id), {
+      type: 'line',
+      data: { labels: monthLabels, datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: { ticks: { color: '#6b7280', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#2e2a1e' } },
+          y: { ticks: { color: '#6b7280', font: { family: 'IBM Plex Mono', size: 10 }, callback: v => v.toLocaleString() }, grid: { color: '#2e2a1e' } }
+        },
+        plugins: { legend: { display: false }, tooltip: {
+          callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.raw.toLocaleString() },
+          itemSort: (a, b) => b.raw - a.raw
+        } }
+      }
+    });
+    document.getElementById(legendId).innerHTML = series.map(s =>
+      '<span><span class="legend-swatch" style="background:' + s.color + '"></span>' + s.label + '</span>'
+    ).join('');
+  }
+
+  function buildTrendChart() {
+    const loaded = MONTHS.filter(m => allMonthData[m.label]);
+    makeTrendLine('trendHeadsChart', 'trendHeadsLegend', [
+      { label: 'Rain Bird', col: 'Rain Bird Head',  color: '#3ecfcf' },
+      { label: 'Toro',      col: 'Toro_Head',       color: '#f97316' },
+      { label: 'Hunter',    col: 'Hunter_Head',     color: '#a855f7' },
+    ], loaded);
+    makeTrendLine('trendPipeChart', 'trendPipeLegend', [
+      { label: 'Mainline',   col: 'Mainline (length)',            color: '#3b82f6' },
+      { label: 'Lateral',    col: 'Lateral (length)',             color: '#22d3ee' },
+      { label: 'Perf Pipe',  col: 'Perf Drainage Pipe (length)',  color: '#f43f5e' },
+      { label: 'Solid Pipe', col: 'Solid Drainage Pipe (length)', color: '#fb923c' },
+    ], loaded);
+  }
+
+  // ── Analytics / Fun Stats ────────────────────────────────────────
+  function buildAnalytics() {
+    const loaded = MONTHS.filter(m => allMonthData[m.label]);
+    if (loaded.length === 0) return;
+
+    // Combine ALL months
+    const allHdrs = allMonthData[loaded[0].label].headers;
+    const allR = loaded.flatMap(m => allMonthData[m.label].rows);
+    const ix = n => allHdrs.indexOf(n);
+    // Group by job to avoid double-counting multi-collector jobs
+    const jobIdx2 = ix('Job');
+    const jobTotals2 = {};
+    allR.forEach(r => {
+      const job = r[jobIdx2] || 'Unknown';
+      if (!jobTotals2[job]) jobTotals2[job] = {};
+      allHdrs.forEach((h, i) => {
+        jobTotals2[job][h] = (jobTotals2[job][h] || 0) + (parseFloat(r[i]) || 0);
+      });
+    });
+    const jobRows2 = Object.values(jobTotals2);
+    const sumCol = (rows, col) => jobRows2.reduce((t, r) => t + (r[col] || 0), 0);
+
+    // ── Totals ───────────────────────────────────────────────────
+    const totalMainline = sumCol(allR, 'Mainline (length)');
+    const totalLateral  = sumCol(allR, 'Lateral (length)');
+    const totalPerfPipe = sumCol(allR, 'Perf Drainage Pipe (length)');
+    const totalSolidPipe= sumCol(allR, 'Solid Drainage Pipe (length)');
+    const totalPipe = totalMainline + totalLateral + totalPerfPipe + totalSolidPipe;
+
+    const totalRainBird = sumCol(allR, 'Rain Bird Head');
+    const totalToro     = sumCol(allR, 'Toro_Head');
+    const totalHunter   = sumCol(allR, 'Hunter_Head');
+    const totalHeads    = totalRainBird + totalToro + totalHunter;
+
+    // ── Best month for heads ─────────────────────────────────────
+    let bestMonth = { label: '—', count: 0 };
+    loaded.forEach(m => {
+      const rows = allMonthData[m.label].rows;
+      const hdrs = allMonthData[m.label].headers;
+      const ix2 = n => hdrs.indexOf(n);
+      const s = (col) => rows.reduce((t, r) => t + (parseFloat(r[ix2(col)]) || 0), 0);
+      const count = s('Rain Bird Head') + s('Toro_Head') + s('Hunter_Head');
+      if (count > bestMonth.count) bestMonth = { label: m.label, count };
+    });
+
+    // ── Top collector (most non-zero items across all cols) ──────
+    const collectorIdx = ix('Collector');
+    const collectorScores = {};
+    allR.forEach(r => {
+      const name = r[collectorIdx] || 'Unknown';
+      const score = r.slice(2).reduce((t, v) => t + (parseFloat(v) > 0 ? 1 : 0), 0);
+      collectorScores[name] = (collectorScores[name] || 0) + score;
+    });
+    const topCollector = Object.entries(collectorScores).sort((a,b) => b[1]-a[1])[0];
+    const topName = topCollector ? topCollector[0].replace(/_landscapesm4|_LandscapesM4/gi,'').replace(/_/g,' ') : '—';
+
+    // ── Fun comparisons ──────────────────────────────────────────
+
+    // Earth circumference
+    const EARTH_CIRCUMFERENCE_FT = 131482560;
+    const earthPct = (totalPipe / EARTH_CIRCUMFERENCE_FT * 100).toFixed(2);
+
+    // Distance to the moon: 1,282,742,400 ft (242,919 miles)
+    const MOON_DIST_FT = 1282742400;
+    const moonPct = (totalPipe / MOON_DIST_FT * 100).toFixed(3);
+
+    // Irrigated area: each head covers a 75ft radius circle = pi*75^2 sq ft
+    // But heads overlap so use 75ft throw as diameter strip: circle area = pi*r^2
+    const HEAD_RADIUS_FT = 75;
+    const sqFtPerHead = Math.PI * HEAD_RADIUS_FT * HEAD_RADIUS_FT;
+    const totalIrrigatedSqFt = totalHeads * sqFtPerHead;
+    const totalIrrigatedSqMi = totalIrrigatedSqFt / 27878400; // sq ft per sq mile
+    const irrigatedStr = totalIrrigatedSqMi >= 1
+      ? totalIrrigatedSqMi.toFixed(2) + ' sq miles'
+      : Math.round(totalIrrigatedSqFt / 43560).toLocaleString() + ' acres';
+
+    // Bunker area vs Florida coastline
+    const totalBunkerSqFt = sumCol(allR, 'Bunker (sqft)');
+    const totalBunkerAcres = (totalBunkerSqFt / 43560).toFixed(1);
+    // Florida coastline = 1,350 miles. Avg bunker width ~40ft.
+    // Bunker sqft / 40ft wide = linear feet of coastline covered
+    const flCoastlineFt = 1350 * 5280; // 7,128,000 ft
+    const bunkerLinearFt = totalBunkerSqFt / 40;
+    const flCoastlinePct = (bunkerLinearFt / flCoastlineFt * 100).toFixed(2);
+    const bunkerMiles = (bunkerLinearFt / 5280).toFixed(2);
+
+    // ── Render stat cards ────────────────────────────────────────
+    const fmt = n => Math.round(n).toLocaleString();
+    const fmtDec = (n, d) => n.toFixed(d);
+
+    document.getElementById('statTotalPipe').textContent = fmt(totalPipe) + ' ft';
+    document.getElementById('statPipeSub').textContent =
+      'Mainline ' + fmt(totalMainline) + ' · Lateral ' + fmt(totalLateral);
+
+    document.getElementById('statTotalHeads').textContent = fmt(totalHeads);
+    document.getElementById('statHeadsSub').textContent =
+      'RB ' + fmt(totalRainBird) + ' · Toro ' + fmt(totalToro) + ' · Hunter ' + fmt(totalHunter);
+
+    document.getElementById('statBestMonth').textContent = bestMonth.label;
+    document.getElementById('statBestMonthSub').textContent = fmt(bestMonth.count) + ' heads installed';
+
+    document.getElementById('statTopCollector').textContent = topName.split('_')[0];
+    document.getElementById('statTopCollectorSub').textContent = topCollector ? topCollector[1] + ' installs logged' : '';
+
+    // ── Render fun cards ─────────────────────────────────────────
+    const funData = [
+      {
+        cls: 'earth',
+        icon: '🌍',
+        number: earthPct + '%',
+        headline: 'of the way around the Earth — in pipe alone',
+        detail: fmt(totalPipe) + ' ft total laid · Earth circumference = 131,482,560 ft (24,901 miles)'
+      },
+      {
+        cls: 'moon',
+        icon: '🌕',
+        number: moonPct + '%',
+        headline: 'of the distance to the Moon covered by your pipe network',
+        detail: fmt(totalPipe) + ' ft laid · Distance to Moon = 1,282,742,400 ft (242,919 miles)'
+      },
+      {
+        cls: 'water',
+        icon: '💧',
+        number: irrigatedStr,
+        headline: 'of turf brought to life — estimated irrigated coverage',
+        detail: fmt(totalHeads) + ' heads · 75 ft throw radius per head · ' + fmt(Math.round(totalIrrigatedSqFt / 43560)) + ' total acres'
+      },
+      {
+        cls: 'beach',
+        icon: '🏖',
+        number: flCoastlinePct + '%',
+        headline: 'of Florida\'s entire coastline — lined end to end with your bunker sand',
+        detail: fmt(Math.round(totalBunkerSqFt)) + ' sq ft · ' + totalBunkerAcres + ' acres · ' + bunkerMiles + ' miles of bunker · FL coastline = 1,350 miles'
+      }
+    ];
+
+    const fc = document.getElementById('funCards');
+    fc.innerHTML = funData.map(f =>
+      '<div class="fun-card ' + f.cls + '">' +
+        '<div class="fun-visual">' + f.icon + '</div>' +
+        '<div class="fun-body">' +
+          '<div class="fun-number">' + f.number + '</div>' +
+          '<div class="fun-headline">' + f.headline + '</div>' +
+          '<div class="fun-detail">' + f.detail + '</div>' +
+        '</div>' +
+      '</div>'
+    ).join('');
+
+    document.getElementById('analyticsSection').style.display = 'flex';
+  }
+
+
+  // ── Bubble Chart — Feature Areas ────────────────────────────────
+  function buildBubbleChart() {
+    const loaded = MONTHS.filter(m => allMonthData[m.label]);
+    if (loaded.length === 0) return;
+
+    const allHdrs = allMonthData[loaded[0].label].headers;
+    const allR = loaded.flatMap(m => allMonthData[m.label].rows);
+    const ix = n => allHdrs.indexOf(n);
+
+    // Group by job to avoid double-counting
+    const jobIdx = ix('Job');
+    const jobTotals = {};
+    allR.forEach(r => {
+      const job = r[jobIdx] || 'Unknown';
+      if (!jobTotals[job]) jobTotals[job] = {};
+      allHdrs.forEach((h, i) => {
+        jobTotals[job][h] = (jobTotals[job][h] || 0) + (parseFloat(r[i]) || 0);
+      });
+    });
+    const jobRows = Object.values(jobTotals);
+    const sum = c => jobRows.reduce((t, r) => t + (r[c] || 0), 0);
+
+    const features = [
+      { label: 'Green',       col: 'Green (sqft)',   color: '#22c55e' },
+      { label: 'Bunker',      col: 'Bunker (sqft)',  color: '#f59e0b' },
+      { label: 'Fairway',     col: 'Fairway',        color: '#84cc16' },
+      { label: 'Rough',       col: 'Rough',          color: '#16a34a' },
+      { label: 'Native',      col: 'Native',         color: '#92400e' },
+      { label: 'Sod',         col: 'Sod',            color: '#06b6d4' },
+      { label: 'Tee',         col: 'Tee',            color: '#8b5cf6' },
+      { label: 'Lake',        col: 'Lake',           color: '#3b82f6' },
+      { label: 'Cart Path',   col: 'Cart Path Area', color: '#6b7280' },
+    ].map(f => ({ ...f, val: Math.round(sum(f.col)) }))
+     .filter(f => f.val > 0)
+     .sort((a, b) => b.val - a.val);
+
+    if (features.length === 0) return;
+
+    const container = document.getElementById('bubbleViz');
+    const W = container.offsetWidth || 600;
+    const H = 420;
+    const maxVal = features[0].val;
+
+    // Size bubbles: largest gets radius 110, smallest min 38
+    const MAX_R = Math.min(110, W / 6);
+    const MIN_R = 38;
+    const bubbles = features.map(f => ({
+      ...f,
+      r: MIN_R + (MAX_R - MIN_R) * Math.sqrt(f.val / maxVal)
+    }));
+
+    // Simple physics-free placement — pack in rows
+    const placed = [];
+    let attempts = 0;
+    bubbles.forEach(b => {
+      let x, y, overlap;
+      let tries = 0;
+      do {
+        overlap = false;
+        x = b.r + Math.random() * (W - 2 * b.r);
+        y = b.r + Math.random() * (H - 2 * b.r);
+        for (const p of placed) {
+          const dx = x - p.x, dy = y - p.y;
+          if (Math.sqrt(dx*dx + dy*dy) < b.r + p.r + 6) { overlap = true; break; }
+        }
+        tries++;
+      } while (overlap && tries < 300);
+      placed.push({ ...b, x, y });
+    });
+
+    container.innerHTML = '';
+    placed.forEach(b => {
+      const acres = (b.val / 43560).toFixed(1);
+      const size = b.r * 2;
+      const fontSize = Math.max(10, Math.min(16, b.r * 0.28));
+      const valSize = Math.max(9, Math.min(13, b.r * 0.22));
+      const el = document.createElement('div');
+      el.className = 'bubble-item';
+      el.style.cssText = [
+        'left:' + (b.x - b.r) + 'px',
+        'top:' + (b.y - b.r) + 'px',
+        'width:' + size + 'px',
+        'height:' + size + 'px',
+        'background:' + b.color,
+      ].join(';');
+      el.innerHTML =
+        '<span class="bubble-label" style="font-size:' + fontSize + 'px;padding:0 6px;">' + b.label + '</span>' +
+        '<span class="bubble-value" style="font-size:' + valSize + 'px;">' + acres + ' ac</span>';
+      el.title = b.label + ': ' + b.val.toLocaleString() + ' sqft (' + acres + ' acres)';
+      container.appendChild(el);
+    });
+
+    // Legend
+    const leg = document.getElementById('bubbleLegend');
+    leg.innerHTML = features.map(f =>
+      '<span><span class="legend-swatch" style="background:' + f.color + '"></span>' +
+      f.label + ': ' + (f.val / 43560).toFixed(1) + ' ac</span>'
+    ).join('');
+  }
+
+  // ── Boot ─────────────────────────────────────────────────────────
+  async function init() {
+
+    try {
+      await fetchAllSheets();
+      if (MONTHS.length === 0) throw new Error('No sheets found');
+      document.getElementById('statusEl').innerHTML = '<div class="dot"></div><span>LIVE — ' + new Date().toLocaleDateString() + '</span>';
+    } catch(err) {
+      console.error('Failed to load data:', err);
+      document.getElementById('statusEl').innerHTML = '<span style="color:#f06060">⚠ ERROR</span>';
+      return;
+    }
+
+    buildDropdown();
+    switchView(MONTHS[MONTHS.length - 1].label);
+    // Defer chart rendering so DOM has fully laid out
+    requestAnimationFrame(() => {
+      buildTrendChart();
+      buildAnalytics();
+      buildBubbleChart();
+    });
+  }
+
+  init();
+</script>
+</body>
+</html>
