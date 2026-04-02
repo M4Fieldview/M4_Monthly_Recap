@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Install Recap</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
       --bg: #1a1610; --surface: #242018; --border: #3d3728;
@@ -15,18 +15,18 @@
     @media (min-width: 600px) { :root { --gap: 20px; --pad: 24px; } }
     @media (min-width: 900px) { :root { --gap: 24px; --pad: 32px; } }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; min-height: 100vh; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; min-height: 100vh; }
     header { background: var(--header-bg); border-bottom: 2px solid var(--accent); padding: 14px var(--pad); display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
     header .logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--accent); white-space: nowrap; }
     @media (min-width: 600px) { header .logo { font-size: 28px; } }
-    header .subtitle { color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; display: none; }
+    header .subtitle { color: var(--muted); font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; display: none; }
     @media (min-width: 480px) { header .subtitle { display: block; } }
     header .spacer { flex: 1; }
-    header .status { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent2); display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+    header .status { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--accent2); display: flex; align-items: center; gap: 6px; white-space: nowrap; }
     header .status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent2); animation: pulse 2s infinite; flex-shrink: 0; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
     .controls { padding: var(--gap) var(--pad); display: flex; gap: var(--gap); align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--border); background: var(--surface); }
-    select#monthSelect { background: var(--bg); border: 1px solid var(--accent); color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 9px 12px; border-radius: 6px; outline: none; cursor: pointer; letter-spacing: 0.5px; width: 100%; }
+    select#monthSelect { background: var(--bg); border: 1px solid var(--accent); color: var(--accent); font-family: 'Inter', sans-serif; font-size: 12px; padding: 9px 12px; border-radius: 6px; outline: none; cursor: pointer; letter-spacing: 0.5px; width: 100%; }
     @media (min-width: 480px) { select#monthSelect { width: auto; } }
     select#monthSelect:focus { border-color: var(--accent2); }
 
@@ -34,19 +34,19 @@
     .charts-grid { display: grid; grid-template-columns: 1fr; gap: var(--gap); }
     @media (min-width: 600px) { .charts-grid { grid-template-columns: repeat(3, 1fr); } }
     .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: var(--gap); }
-    .chart-title { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
-    .donut-legend { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+    .chart-title { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .donut-legend { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; font-family: 'Inter', sans-serif; font-size: 11px; color: var(--muted); }
     .donut-legend span { display: flex; align-items: center; gap: 7px; }
     .legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
     .donut-wrap { position: relative; width: 100%; height: 260px; }
     .bar-wrap { position: relative; width: 100%; height: 260px; }
-    .bar-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+    .bar-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 10px; font-family: 'Inter', sans-serif; font-size: 11px; color: var(--muted); }
     .bar-legend span { display: flex; align-items: center; gap: 6px; }
     .table-section { padding: var(--gap) var(--pad) calc(var(--gap) * 2); }
     .table-wrap { overflow-x: auto; overflow-y: auto; max-height: 60vh; border-radius: 10px; border: 1px solid var(--border); }
     table { border-collapse: collapse; width: max-content; min-width: 100%; }
     thead { position: sticky; top: 0; z-index: 10; }
-    thead th { background: var(--header-bg); border-bottom: 2px solid var(--accent); border-right: 1px solid var(--border); padding: 10px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); white-space: nowrap; cursor: pointer; user-select: none; transition: background 0.15s; }
+    thead th { background: var(--header-bg); border-bottom: 2px solid var(--accent); border-right: 1px solid var(--border); padding: 10px 14px; font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); white-space: nowrap; cursor: pointer; user-select: none; transition: background 0.15s; }
     thead th:hover { background: #1e2333; }
     thead th.sorted-asc::after { content: ' ↑'; color: var(--accent2); }
     thead th.sorted-desc::after { content: ' ↓'; color: var(--accent2); }
@@ -55,10 +55,10 @@
     tbody tr { border-bottom: 1px solid var(--border); }
     tbody tr:hover td { background: #2e2a1e !important; }
     tbody tr:nth-child(even) td { background: #1e1c14; }
-    tbody td { padding: 9px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text); white-space: nowrap; border-right: 1px solid var(--border); background: var(--bg); }
+    tbody td { padding: 9px 14px; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text); white-space: nowrap; border-right: 1px solid var(--border); background: var(--bg); }
     tbody td.has-value { color: var(--accent2); font-weight: 600; }
     tbody td.length-value { color: #f0a03a; font-weight: 600; }
-    .state-msg { padding: 60px 32px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--muted); }
+    .state-msg { padding: 60px 32px; text-align: center; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--muted); }
     .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 10px; vertical-align: middle; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .table-wrap::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -68,46 +68,39 @@
     /* ANALYTICS SECTION */
     .analytics-section { padding: 0 var(--pad) calc(var(--gap) * 3); display: flex; flex-direction: column; gap: var(--gap); }
     .analytics-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px; color: var(--accent); margin-bottom: 4px; }
-    .analytics-subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    .analytics-subtitle { font-family: 'Inter', sans-serif; font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
     .stat-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
     @media (min-width: 600px) { .stat-cards { grid-template-columns: repeat(4, 1fr); } }
     .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: var(--gap); display: flex; flex-direction: column; gap: 4px; border-left-width: 3px; }
 
 
     .stat-card .stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: var(--text); line-height: 1; margin: 2px 0; }
-    .stat-card .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; }
-    .stat-card .stat-sub { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); line-height: 1.5; }
-    .fun-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
-    @media (max-width: 600px) { .fun-cards { grid-template-columns: 1fr; } }
-    .fun-card { border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; border: none; }
-    .fun-card .fun-visual { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 100px; line-height: 1; position: relative; }
-    .fun-card.earth .fun-visual  { background: #1a1408; border-bottom: 2px solid #e8c97a; }
-    .fun-card.moon  .fun-visual  { background: #161008; border-bottom: 2px solid #d4a86a; }
-    .fun-card.water .fun-visual  { background: #120e06; border-bottom: 2px solid #c8a85a; }
-    .fun-card.beach .fun-visual  { background: #201808; border-bottom: 2px solid #b89048; }
-    .fun-card .fun-visual .fun-glow { position: absolute; width: 160px; height: 160px; border-radius: 50%; opacity: 0.12; }
+    .stat-card .stat-label { font-family: 'Inter', sans-serif; font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; }
+    .stat-card .stat-sub { font-family: 'Inter', sans-serif; font-size: 10px; color: var(--muted); line-height: 1.5; }
+    .fun-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); justify-items: center; }
+    .fun-card { border-radius: 50%; aspect-ratio: 1; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; border: 2px solid; width: 100%; max-width: 360px; position: relative; }
+    .fun-card.earth { background: #1a160a; border-color: #e8c97a; }
+    .fun-card.moon  { background: #18140f; border-color: #d4a86a; }
+    .fun-card.water { background: #14110a; border-color: #c8a85a; }
+    .fun-card.beach { background: #1c1508; border-color: #b89048; }
+    .fun-card .fun-glow { position: absolute; width: 70%; height: 70%; border-radius: 50%; opacity: 0.07; pointer-events: none; }
     .fun-card.earth .fun-glow  { background: #e8c97a; }
     .fun-card.moon  .fun-glow  { background: #d4a86a; }
     .fun-card.water .fun-glow  { background: #c8a85a; }
     .fun-card.beach .fun-glow  { background: #b89048; }
-    .fun-card .fun-emoji { position: relative; z-index: 1; }
-    .fun-card .fun-body { padding: 22px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
-    .fun-card.earth .fun-body  { background: #1a160a; }
-    .fun-card.moon  .fun-body  { background: #18140f; }
-    .fun-card.water .fun-body  { background: #14110a; }
-    .fun-card.beach .fun-body  { background: #1c1508; }
+    .fun-card .fun-emoji { font-size: 40px; line-height: 1; margin-bottom: 6px; position: relative; }
     .fun-card.earth .fun-number { color: #e8c97a; }
     .fun-card.moon  .fun-number { color: #d4a86a; }
     .fun-card.water .fun-number { color: #c8a85a; }
     .fun-card.beach .fun-number { color: #b89048; }
-    .fun-card .fun-number { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 2px; line-height: 1; }
-    .fun-card .fun-headline { font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; font-weight: 600; color: #c8cfe0; line-height: 1.5; }
-    .fun-card .fun-detail { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #4a5568; margin-top: 6px; letter-spacing: 0.3px; line-height: 1.6; }
+    .fun-card .fun-number { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 2px; line-height: 1; position: relative; }
+    .fun-card .fun-headline { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: #c8cfe0; line-height: 1.5; margin-top: 6px; position: relative; }
+    .fun-card .fun-detail { font-family: 'Inter', sans-serif; font-size: 9px; color: #4a5568; margin-top: 6px; letter-spacing: 0.3px; line-height: 1.6; position: relative; }
 
     .bubble-item { position: absolute; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: default; transition: transform 0.2s; overflow: hidden; }
     .bubble-item:hover { transform: scale(1.06); z-index: 10; }
     .bubble-label { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; color: #fff; line-height: 1.1; pointer-events: none; }
-    .bubble-value { font-family: 'IBM Plex Mono', monospace; color: rgba(255,255,255,0.8); line-height: 1.2; pointer-events: none; }
+    .bubble-value { font-family: 'Inter', sans-serif; color: rgba(255,255,255,0.8); line-height: 1.2; pointer-events: none; }
   </style>
 </head>
 <body>
@@ -240,7 +233,7 @@
       opt.value = m.label; opt.textContent = m.label;
       sel.appendChild(opt);
     });
-    sel.value = loaded[loaded.length - 1].label;
+    sel.value = '__all__';
     sel.addEventListener('change', () => switchView(sel.value));
   }
 
@@ -477,41 +470,40 @@
         cls: 'earth',
         icon: '🌍',
         number: earthPct + '%',
-        headline: 'of the way around the Earth — in pipe alone',
-        detail: fmt(totalPipe) + ' ft total laid · Earth circumference = 131,482,560 ft (24,901 miles)'
+        headline: 'around the Earth in pipe',
+        detail: fmt(totalPipe) + ' ft laid'
       },
       {
         cls: 'moon',
         icon: '🌕',
         number: moonPct + '%',
-        headline: 'of the distance to the Moon covered by your pipe network',
-        detail: fmt(totalPipe) + ' ft laid · Distance to Moon = 1,282,742,400 ft (242,919 miles)'
+        headline: 'of the way to the Moon',
+        detail: fmt(totalPipe) + ' ft laid'
       },
       {
         cls: 'water',
         icon: '💧',
         number: irrigatedStr,
-        headline: 'of turf brought to life — estimated irrigated coverage',
-        detail: fmt(totalHeads) + ' heads · 75 ft throw radius per head · ' + fmt(Math.round(totalIrrigatedSqFt / 43560)) + ' total acres'
+        headline: 'irrigated coverage',
+        detail: fmt(totalHeads) + ' heads installed'
       },
       {
         cls: 'beach',
         icon: '🏖',
         number: flCoastlinePct + '%',
-        headline: 'of Florida\'s entire coastline — lined end to end with your bunker sand',
-        detail: fmt(Math.round(totalBunkerSqFt)) + ' sq ft · ' + totalBunkerAcres + ' acres · ' + bunkerMiles + ' miles of bunker · FL coastline = 1,350 miles'
+        headline: 'of Florida\'s coastline in bunker sand',
+        detail: totalBunkerAcres + ' acres · ' + bunkerMiles + ' miles'
       }
     ];
 
     const fc = document.getElementById('funCards');
     fc.innerHTML = funData.map(f =>
       '<div class="fun-card ' + f.cls + '">' +
-        '<div class="fun-visual">' + f.icon + '</div>' +
-        '<div class="fun-body">' +
-          '<div class="fun-number">' + f.number + '</div>' +
-          '<div class="fun-headline">' + f.headline + '</div>' +
-          '<div class="fun-detail">' + f.detail + '</div>' +
-        '</div>' +
+        '<div class="fun-glow"></div>' +
+        '<div class="fun-emoji">' + f.icon + '</div>' +
+        '<div class="fun-number">' + f.number + '</div>' +
+        '<div class="fun-headline">' + f.headline + '</div>' +
+        '<div class="fun-detail">' + f.detail + '</div>' +
       '</div>'
     ).join('');
 
@@ -625,7 +617,7 @@
     }
 
     buildDropdown();
-    switchView(MONTHS[MONTHS.length - 1].label);
+    switchView('__all__');
     // Defer chart rendering so DOM has fully laid out
     requestAnimationFrame(() => {
       buildTrendChart();
