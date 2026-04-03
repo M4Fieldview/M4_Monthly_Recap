@@ -421,12 +421,16 @@
       if (count > bestMonth.count) bestMonth = { label: m.label, count };
     });
 
-    // ── Top collector (most non-zero items across all cols) ──────
+    // ── Top collector: heads + pipe (per ft × 0.1) + area (per 100 sqft × 0.1) ──
     const collectorIdx = ix('Collector');
     const collectorScores = {};
     allR.forEach(r => {
       const name = r[collectorIdx] || 'Unknown';
-      const score = r.slice(2).reduce((t, v) => t + (parseFloat(v) > 0 ? 1 : 0), 0);
+      const get = col => parseFloat(r[ix(col)]) || 0;
+      const heads = get('Rain Bird Head') + get('Toro_Head') + get('Hunter_Head');
+      const pipe  = get('Mainline (length)') + get('Lateral (length)') + get('Perf Drainage Pipe (length)') + get('Solid Drainage Pipe (length)');
+      const area  = get('Green (sqft)') + get('Rough') + get('Fairway') + get('Bunker (sqft)') + get('Tee') + get('Sod') + get('Native') + get('Cart Path Area') + get('Lake');
+      const score = heads + (pipe * 0.1) + (area / 100 * 0.1);
       collectorScores[name] = (collectorScores[name] || 0) + score;
     });
     const topCollector = Object.entries(collectorScores).sort((a,b) => b[1]-a[1])[0];
