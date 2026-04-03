@@ -160,6 +160,11 @@
     <div class="analytics-subtitle">All time totals across all jobs &amp; months</div>
   </div>
   <div class="stat-cards">
+    <div class="stat-card" style="border-left:3px solid #22c55e;">
+      <div class="stat-label">Number of Jobs</div>
+      <div class="stat-value" id="statUniqueJobs">—</div>
+      <div class="stat-sub" id="statUniqueJobsSub"></div>
+    </div>
     <div class="stat-card" style="border-left:3px solid #3b82f6;">
       <div class="stat-label">Total Pipe Laid</div>
       <div class="stat-value" id="statTotalPipe">—</div>
@@ -460,6 +465,10 @@
     // ── Render stat cards ────────────────────────────────────────
     const fmt = n => Math.round(n).toLocaleString();
     const fmtDec = (n, d) => n.toFixed(d);
+
+    const uniqueJobs = Object.keys(jobTotals).length;
+    document.getElementById('statUniqueJobs').textContent = uniqueJobs;
+    document.getElementById('statUniqueJobsSub').textContent = 'across all months';
 
     document.getElementById('statTotalPipe').textContent = fmt(totalPipe) + ' ft';
     document.getElementById('statPipeSub').textContent =
