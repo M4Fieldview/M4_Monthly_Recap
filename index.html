@@ -4,432 +4,112 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Install Recap</title>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #060a08;
-      --surface: #0a100d;
-      --surface2: #0f1812;
-      --border: #142018;
-      --border-light: #1e3028;
-      --cyan: #00e5ff;
-      --cyan-dim: #003a45;
-      --cyan-glow: rgba(0,229,255,0.15);
-      --amber: #ffaa00;
-      --amber-dim: #3a2800;
-      --green: #00e676;
-      --green-dim: #003820;
-      --magenta: #e040fb;
-      --text: #d0e8e0;
-      --text-muted: #3a6050;
-      --text-dim: #1a3028;
-      --header-bg: #040806;
+      --bg: #23262b;
+      --surface: #15181d;
+      --border: #15181d;
+      --green: #52C48C;
+      --yellow: #C8963A;
+      --red: #B05040;
+      --blue: #3A9BAC;
+      --text: #DCE8E2;
+      --muted: #eeeeee;
+      --muted2: #eeeeee;
+      --mono: 'Outfit', sans-serif;
+      --sans: 'Outfit', sans-serif;
       --gap: 20px;
-      --pad: 24px;
-      --radius: 0px;
+      --pad: 28px;
+      --radius: 6px;
     }
-    @media (min-width: 900px) { :root { --gap: 28px; --pad: 48px; } }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--sans);font-weight:500;min-height:100vh;}
 
-    body {
-      background: var(--bg);
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(0,229,255,0.03) 60px),
-        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(0,229,255,0.03) 60px);
-      color: var(--text);
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 12px;
-      min-height: 100vh;
-    }
+    .page-wrap{max-width:1440px;margin:0 auto;}
 
-    /* scanline overlay */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 3px);
-      pointer-events: none;
-      z-index: 9999;
-    }
+    /* Header */
+    header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:100;}
+    .header-brand{display:flex;align-items:center;gap:12px;padding:14px 0;}
+    .hex{width:30px;height:30px;background:var(--green);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);flex-shrink:0;}
+    .brand-text h1{font-family:var(--mono);font-size:17px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);}
+    .brand-text p{font-family:var(--mono);font-size:13px;color:var(--muted);margin-top:2px;}
+    .header-meta{display:flex;align-items:center;gap:8px;padding:14px 0;}
+    .meta-badge{font-family:var(--mono);font-size:13px;color:var(--muted);background:var(--bg);border:1px solid var(--border);padding:5px 10px;border-radius:4px;}
+    .status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px;}
+    .status-dot.live{background:var(--green);box-shadow:0 0 6px var(--green);}
+    .status-dot.err{background:var(--red);}
+    .status-dot.loading{background:var(--yellow);animation:pulse 1s infinite;}
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 
-    .page-wrap { max-width: 1440px; margin: 0 auto; }
+    /* Controls bar */
+    .controls{background:var(--surface);border-bottom:1px solid var(--border);padding:9px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+    .controls-label{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+    select#monthSelect{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:14px;padding:5px 10px;border-radius:4px;outline:none;cursor:pointer;}
+    select#monthSelect:focus{border-color:var(--green);}
+    select#monthSelect option{background:var(--surface);}
 
-    /* ── Header ── */
-    header {
-      background: var(--header-bg);
-      border-bottom: 1px solid var(--border-light);
-      padding: 0 var(--pad);
-      display: flex;
-      align-items: stretch;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      min-height: 60px;
-    }
-    header::after {
-      content: '';
-      position: absolute;
-      bottom: -3px; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--cyan), var(--cyan), transparent);
-      opacity: 0.6;
-    }
-    .header-brand {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 3px;
-      padding: 12px 28px 12px 0;
-      border-right: 1px solid var(--border-light);
-      margin-right: 28px;
-    }
-    header .logo {
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 700;
-      font-size: 22px;
-      letter-spacing: 5px;
-      color: var(--cyan);
-      text-transform: uppercase;
-      white-space: nowrap;
-      text-shadow: 0 0 12px rgba(0,229,255,0.5);
-    }
-    @media (min-width: 600px) { header .logo { font-size: 26px; } }
-    header .subtitle {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
+    /* Section labels */
+    .slabel{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:20px 0 12px;display:flex;align-items:center;gap:10px;}
+    .slabel::after{content:'';flex:1;height:1px;background:var(--border);}
 
-    /* header data boxes */
-    .hdr-box {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 0 20px;
-      border-right: 1px solid var(--border);
-      gap: 2px;
-    }
-    .hdr-box-label {
-      font-size: 8px;
-      letter-spacing: 2px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-    .hdr-box-val {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 13px;
-      color: var(--amber);
-      letter-spacing: 1px;
-    }
+    /* Charts */
+    .charts-section{padding:0 28px;display:flex;flex-direction:column;gap:20px;}
+    .charts-grid{display:grid;grid-template-columns:1fr;gap:20px;}
+    @media(min-width:700px){.charts-grid{grid-template-columns:repeat(3,1fr);}}
+    .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px;}
+    .chart-title{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+    .donut-legend{display:flex;flex-direction:column;gap:6px;margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--muted);}
+    .donut-legend span{display:flex;align-items:center;gap:8px;}
+    .legend-swatch{width:10px;height:2px;flex-shrink:0;}
+    .donut-wrap{position:relative;width:100%;height:240px;}
+    .bar-legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--muted);}
+    .bar-legend span{display:flex;align-items:center;gap:6px;}
 
-    header .spacer { flex: 1; }
-    header .status {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 2px;
-      color: var(--green);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding-left: 24px;
-      border-left: 1px solid var(--border-light);
-      text-shadow: 0 0 8px rgba(0,230,118,0.5);
-    }
-    header .status .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 8px var(--green);
-      animation: pulse 2s infinite;
-      flex-shrink: 0;
-    }
-    @keyframes pulse {
-      0%,100% { opacity:1; box-shadow: 0 0 8px var(--green); }
-      50%      { opacity:0.3; box-shadow: none; }
-    }
+    /* Analytics */
+    .analytics-section{padding:0 28px 48px;display:flex;flex-direction:column;gap:20px;}
+    .stat-cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+    @media(min-width:700px){.stat-cards{grid-template-columns:repeat(5,1fr);}}
+    .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px;position:relative;overflow:hidden;}
+    .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--green);}
+    .stat-card .stat-label{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+    .stat-card .stat-value{font-family:var(--mono);font-size:28px;font-weight:700;line-height:1;color:var(--green);margin-bottom:3px;}
+    .stat-card .stat-sub{font-size:13px;color:var(--muted);}
 
-    /* ── Controls ── */
-    .controls {
-      padding: 0 var(--pad);
-      display: flex;
-      gap: var(--gap);
-      align-items: stretch;
-      flex-wrap: wrap;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-      min-height: 48px;
-    }
-    .controls-label {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-    }
-    select#monthSelect {
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--cyan-dim);
-      color: var(--cyan);
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 13px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 4px 24px 4px 0;
-      outline: none;
-      cursor: pointer;
-      appearance: none;
-      -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%2300e5ff'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 4px center;
-      transition: border-color 0.15s;
-    }
-    select#monthSelect:focus { border-bottom-color: var(--cyan); }
-    select#monthSelect option { background: #0a100d; color: var(--text); }
+    /* Fun cards */
+    .fun-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+    @media(min-width:700px){.fun-cards{grid-template-columns:repeat(4,1fr);}}
+    .fun-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden;}
+    .fun-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+    .fun-card.earth::before,.fun-card.moon::before,.fun-card.water::before{background:var(--blue);}
+    .fun-card.beach::before{background:var(--yellow);}
+    .fun-card .fun-glow{display:none;}
+    .fun-card .fun-emoji{font-size:22px;line-height:1;}
+    .fun-card .fun-number{font-family:var(--mono);font-size:28px;font-weight:700;line-height:1;color:var(--blue);}
+    .fun-card.beach .fun-number{color:var(--yellow);}
+    .fun-card .fun-headline{font-family:var(--mono);font-size:13px;color:var(--text);line-height:1.5;}
+    .fun-card .fun-detail{font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.5;}
 
-    /* ── Section header ── */
-    .section-header {
-      padding: calc(var(--gap) * 1.2) var(--pad) calc(var(--gap) * 0.6);
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .section-title {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      color: var(--cyan);
-      text-shadow: 0 0 8px rgba(0,229,255,0.4);
-    }
-    .section-rule {
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, var(--border-light), transparent);
-    }
-
-    /* ── Chart cards ── */
-    .charts-section { padding: 0 var(--pad); display: flex; flex-direction: column; gap: var(--gap); }
-    .charts-grid { display: grid; grid-template-columns: 1fr; gap: var(--gap); }
-    @media (min-width: 700px) { .charts-grid { grid-template-columns: repeat(3, 1fr); } }
-
-    .chart-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 20px 20px 16px;
-      position: relative;
-    }
-    /* corner reticles */
-    .chart-card::before, .chart-card::after {
-      content: '';
-      position: absolute;
-      width: 10px; height: 10px;
-      border-color: var(--cyan);
-      border-style: solid;
-      opacity: 0.5;
-    }
-    .chart-card::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
-    .chart-card::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
-
-    .chart-title {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--cyan);
-      margin-bottom: 16px;
-      opacity: 0.7;
-    }
-    .donut-legend {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: 12px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-    .donut-legend span { display: flex; align-items: center; gap: 8px; }
-    .legend-swatch { width: 10px; height: 2px; flex-shrink: 0; }
-    .donut-wrap { position: relative; width: 100%; height: 240px; }
-    .bar-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px 18px;
-      margin-top: 12px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-    }
-    .bar-legend span { display: flex; align-items: center; gap: 6px; }
-
-    /* ── Analytics ── */
-    .analytics-section {
-      padding: 0 var(--pad) calc(var(--gap) * 2);
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap);
-    }
-    .stat-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
-    @media (min-width: 700px) { .stat-cards { grid-template-columns: repeat(5, 1fr); } }
-
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 18px 16px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      position: relative;
-    }
-    /* corner reticles on stat cards */
-    .stat-card::before, .stat-card::after {
-      content: '';
-      position: absolute;
-      width: 7px; height: 7px;
-      border-color: var(--cyan);
-      border-style: solid;
-      opacity: 0.35;
-    }
-    .stat-card::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
-    .stat-card::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
-
-    .stat-card .stat-label {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-    .stat-card .stat-value {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 42px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      color: var(--cyan);
-      line-height: 1;
-      margin: 2px 0;
-      text-shadow: 0 0 16px rgba(0,229,255,0.4);
-    }
-    .stat-card .stat-sub {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 9px;
-      color: var(--text-dim);
-      line-height: 1.6;
-      letter-spacing: 0.5px;
-    }
-
-    /* ── Fun cards ── */
-    .fun-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--gap);
-      justify-items: center;
-    }
-    .fun-card {
-      border-radius: 50%;
-      aspect-ratio: 1;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 28px;
-      border: 1px solid var(--border-light);
-      width: 100%;
-      max-width: 340px;
-      position: relative;
-      background: var(--surface);
-    }
-    .fun-card .fun-glow {
-      position: absolute; width: 55%; height: 55%;
-      border-radius: 50%; opacity: 0.08; pointer-events: none;
-      background: var(--cyan);
-    }
-    .fun-card.beach .fun-glow { background: var(--amber); }
-    .fun-card .fun-emoji { font-size: 28px; line-height: 1; margin-bottom: 6px; position: relative; }
-    .fun-card .fun-number {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 40px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      line-height: 1;
-      color: var(--cyan);
-      text-shadow: 0 0 12px rgba(0,229,255,0.4);
-      position: relative;
-    }
-    .fun-card.beach .fun-number { color: var(--amber); text-shadow: 0 0 12px rgba(255,170,0,0.4); }
-    .fun-card .fun-headline {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      line-height: 1.7;
-      margin-top: 8px;
-      position: relative;
-      text-transform: uppercase;
-    }
-    .fun-card .fun-detail {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 9px;
-      color: var(--text-dim);
-      margin-top: 4px;
-      letter-spacing: 0.5px;
-      line-height: 1.6;
-      position: relative;
-    }
-
-    /* ── Misc ── */
-    .state-msg {
-      padding: 80px 32px;
-      text-align: center;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 13px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-    .spinner {
-      display: inline-block; width: 14px; height: 14px;
-      border: 1px solid var(--border-light);
-      border-top-color: var(--cyan);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin-right: 10px;
-      vertical-align: middle;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* Misc */
+    .state-msg{padding:80px 32px;text-align:center;font-family:var(--mono);font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+    .spinner{display:inline-block;width:14px;height:14px;border:1px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin-right:10px;vertical-align:middle;}
+    @keyframes spin{to{transform:rotate(360deg);}}
   </style>
 </head>
 <body>
 <div class="page-wrap">
 <header>
   <div class="header-brand">
-    <div class="logo">INST / RECAP</div>
-    <div class="subtitle">IRR &amp; LNDSCP · SYS DATA</div>
+    <div class="hex"></div>
+    <div class="brand-text">
+      <h1>Install Recap</h1>
+      <p>Irrigation &amp; Landscape Monthly Summary</p>
+    </div>
   </div>
-  <div class="hdr-box">
-    <div class="hdr-box-label">DATE</div>
-    <div class="hdr-box-val" id="hdrDate">--/--/----</div>
+  <div class="header-meta">
+    <div class="meta-badge" id="hdrDate">—</div>
+    <div class="meta-badge"><span class="status-dot loading" id="statusDot"></span><span id="statusEl">Connecting…</span></div>
   </div>
-  <div class="hdr-box">
-    <div class="hdr-box-label">MODE</div>
-    <div class="hdr-box-val">ALL TIME</div>
-  </div>
-  <div class="hdr-box">
-    <div class="hdr-box-label">SRC</div>
-    <div class="hdr-box-val">GGL SHEETS</div>
-  </div>
-  <div class="spacer"></div>
-  <div class="status" id="statusEl"><div class="dot"></div><span>INITIALIZING</span></div>
 </header>
 
 <div class="controls">
@@ -437,12 +117,8 @@
   <select id="monthSelect"></select>
 </div>
 
-<div class="section-header">
-  <span class="section-title">SYS·01 / DISTRIBUTION</span>
-  <span class="section-rule"></span>
-</div>
-
 <div class="charts-section">
+  <div class="slabel">Distribution</div>
   <div class="charts-grid">
     <div class="chart-card">
       <div class="chart-title">Sprinkler Heads</div>
@@ -460,10 +136,7 @@
       <div class="donut-legend" id="drainLegend"></div>
     </div>
   </div>
-  <div class="section-header" style="padding-left:0;padding-right:0;">
-    <span class="section-title">SYS·02 / CUMULATIVE TRENDS</span>
-    <span class="section-rule"></span>
-  </div>
+  <div class="slabel">Cumulative Trends</div>
   <div class="chart-card">
     <div class="chart-title">Sprinkler Heads</div>
     <div style="position:relative;width:100%;min-height:260px;height:260px;"><canvas id="trendHeadsChart" style="display:block;"></canvas></div>
@@ -477,13 +150,8 @@
 </div>
 
 <div id="analyticsOuter" style="display:none;">
-<div class="section-header">
-  <span class="section-title">SYS·03 / TELEMETRY</span>
-  <span class="section-rule"></span>
-  <span style="font-family:'Inter',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);">All time</span>
-</div>
-
 <div class="analytics-section" id="analyticsSection" style="padding-top:0;">
+  <div class="slabel">All-Time Stats</div>
   <div class="stat-cards">
     <div class="stat-card">
       <div class="stat-label">Number of Jobs</div>
@@ -511,6 +179,7 @@
       <div class="stat-sub" id="statTopCollectorSub"></div>
     </div>
   </div>
+  <div class="slabel">Fun Facts</div>
   <div class="fun-cards" id="funCards"></div>
 </div>
 </div>
@@ -872,10 +541,12 @@
       if (MONTHS.length === 0) throw new Error('No sheets found');
       const now = new Date();
       document.getElementById('hdrDate').textContent = now.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});
-      document.getElementById('statusEl').innerHTML = '<div class="dot"></div><span>NOMINAL</span>';
+      document.getElementById('statusDot').className = 'status-dot live';
+      document.getElementById('statusEl').textContent = 'Nominal';
     } catch(err) {
       console.error('Failed to load data:', err);
-      document.getElementById('statusEl').innerHTML = '<span style="color:#f06060">⚠ ERROR</span>';
+      document.getElementById('statusDot').className = 'status-dot err';
+      document.getElementById('statusEl').textContent = 'Error';
       return;
     }
 
