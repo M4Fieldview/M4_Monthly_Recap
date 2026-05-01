@@ -212,7 +212,7 @@
 
   // ── Fetch all sheets from Apps Script ───────────────────────────
   async function fetchAllSheets() {
-    const res = await fetch(APPS_SCRIPT_URL);
+    const res = await fetch(APPS_SCRIPT_URL + '?t=' + Date.now(), { cache: 'no-store' });
     if (!res.ok) throw new Error('Apps Script returned ' + res.status);
     const data = await res.json();
     // data = { "January 26": { headers: [...], rows: [[...],[...]] }, ... }
