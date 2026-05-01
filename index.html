@@ -97,10 +97,6 @@
     .fun-card .fun-headline { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: #c8cfe0; line-height: 1.5; margin-top: 6px; position: relative; }
     .fun-card .fun-detail { font-family: 'Inter', sans-serif; font-size: 9px; color: #4a5568; margin-top: 6px; letter-spacing: 0.3px; line-height: 1.6; position: relative; }
 
-    .bubble-item { position: absolute; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: default; transition: transform 0.2s; overflow: hidden; }
-    .bubble-item:hover { transform: scale(1.06); z-index: 10; }
-    .bubble-label { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; color: #fff; line-height: 1.1; pointer-events: none; }
-    .bubble-value { font-family: 'Inter', sans-serif; color: rgba(255,255,255,0.8); line-height: 1.2; pointer-events: none; }
   </style>
 </head>
 <body>
@@ -145,12 +141,6 @@
     <div class="chart-title">Cumulative Trend — Pipe Footage</div>
     <div style="position:relative;width:100%;min-height:260px;height:260px;"><canvas id="trendPipeChart" style="display:block;"></canvas></div>
     <div class="bar-legend" id="trendPipeLegend"></div>
-  </div>
-  <div class="chart-card">
-    <div class="chart-title">Golf Feature Areas — Waffle Chart</div>
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:12px;" id="waffleUnit"></div>
-    <div id="waffleGrid" style="display:flex;flex-wrap:wrap;gap:3px;"></div>
-    <div class="bar-legend" id="waffleLegend" style="margin-top:16px;"></div>
   </div>
 </div>
 
@@ -312,7 +302,6 @@
       { label: 'Perf Pipe',  val: Math.round(sum('Perf Drainage Pipe (length)')),  color: '#f43f5e', topJobs: topJobs('Perf Drainage Pipe (length)') },
       { label: 'Solid Pipe', val: Math.round(sum('Solid Drainage Pipe (length)')), color: '#fb923c', topJobs: topJobs('Solid Drainage Pipe (length)') },
     ]);
-    buildWaffle(rows, hdrs);
   }
 
 
@@ -538,96 +527,6 @@
 
 
   // ── Bubble Chart — Feature Areas ────────────────────────────────
-
-  function buildWaffle(rows, hdrs) {
-    const ix = n => hdrs.indexOf(n);
-    const jobIdx = ix('Job');
-
-    // Group by job first
-    const jobTotals = {};
-    rows.forEach(r => {
-      const job = r[jobIdx] || 'Unknown';
-      if (!jobTotals[job]) jobTotals[job] = {};
-      hdrs.forEach((h, i) => {
-        jobTotals[job][h] = (jobTotals[job][h] || 0) + (parseFloat(r[i]) || 0);
-      });
-    });
-    const jobRows = Object.values(jobTotals);
-    const sum = col => jobRows.reduce((t, r) => t + (r[col] || 0), 0);
-
-    const features = [
-      { label: 'Green',          col: 'Green (sqft)',   color: '#3ecfcf' },
-      { label: 'Rough',          col: 'Rough',          color: '#639922' },
-      { label: 'Fairway',        col: 'Fairway',        color: '#a855f7' },
-      { label: 'Bunker',         col: 'Bunker (sqft)',  color: '#f97316' },
-      { label: 'Tee',            col: 'Tee',            color: '#e8c97a' },
-      { label: 'Sod',            col: 'Sod',            color: '#22d3ee' },
-      { label: 'Native',         col: 'Native',         color: '#88cc66' },
-      { label: 'Cart Path',      col: 'Cart Path Area', color: '#8a7d68' },
-      { label: 'Lake',           col: 'Lake',           color: '#3b82f6' },
-    ];
-
-    // Get totals, filter out zeros
-    const data = features.map(f => ({ ...f, val: Math.round(sum(f.col)) }))
-                         .filter(f => f.val > 0)
-                         .sort((a, b) => b.val - a.val);
-
-    const total = data.reduce((t, f) => t + f.val, 0);
-    if (total === 0) return;
-
-    const SQUARES = 100;
-    const unitSize = total / SQUARES;
-
-    // Assign squares proportionally
-    let squares = [];
-    let remainder = 0;
-    data.forEach(f => {
-      const exact = f.val / unitSize;
-      const whole = Math.floor(exact);
-      remainder += exact - whole;
-      squares.push({ ...f, count: whole });
-    });
-    // Distribute remaining squares to largest remainders
-    let extra = Math.round(remainder);
-    squares.sort((a, b) => (b.val / unitSize - Math.floor(b.val / unitSize)) - (a.val / unitSize - Math.floor(a.val / unitSize)));
-    squares.forEach(f => { if (extra > 0) { f.count++; extra--; } });
-    squares.sort((a, b) => b.val - a.val);
-
-    // Render waffle grid
-    const grid = document.getElementById('waffleGrid');
-    const unitEl = document.getElementById('waffleUnit');
-    const sqFmt = n => n >= 43560 ? (n / 43560).toFixed(1) + ' acres' : n.toLocaleString() + ' sqft';
-    unitEl.textContent = 'Each square ≈ ' + sqFmt(Math.round(unitSize));
-
-    grid.innerHTML = '';
-    const gridSquares = [];
-    squares.forEach(f => {
-      for (let i = 0; i < f.count; i++) gridSquares.push(f);
-    });
-
-    const sqSize = Math.floor((grid.parentElement.clientWidth - 40) / 10) - 3;
-    const size = Math.max(18, Math.min(sqSize, 42)) + 'px';
-
-    gridSquares.forEach(f => {
-      const sq = document.createElement('div');
-      sq.style.cssText = 'width:' + size + ';height:' + size + ';border-radius:4px;background:' + f.color + ';opacity:0.88;transition:opacity 0.15s;cursor:default;';
-      sq.title = f.label + ': ' + f.val.toLocaleString() + ' sqft (' + (f.val / 43560).toFixed(2) + ' acres)';
-      sq.addEventListener('mouseenter', () => sq.style.opacity = '1');
-      sq.addEventListener('mouseleave', () => sq.style.opacity = '0.88');
-      grid.appendChild(sq);
-    });
-
-    // Legend
-    const legend = document.getElementById('waffleLegend');
-    legend.innerHTML = data.map(f =>
-      '<span style="display:flex;align-items:center;gap:6px;">' +
-        '<span style="width:10px;height:10px;border-radius:2px;background:' + f.color + ';flex-shrink:0;"></span>' +
-        '<span style="font-family:IBM Plex Mono,monospace;font-size:11px;color:var(--muted);">' +
-          f.label + ' <strong style="color:var(--text);">' + (f.val / 43560).toFixed(1) + ' ac</strong>' +
-        '</span>' +
-      '</span>'
-    ).join('');
-  }
 
   // ── Boot ─────────────────────────────────────────────────────────
   async function init() {
