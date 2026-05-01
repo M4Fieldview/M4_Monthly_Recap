@@ -4,23 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Install Recap</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #080608;
-      --surface: #0f0c0f;
-      --surface2: #161218;
-      --border: #251820;
-      --border-light: #3a2030;
-      --red: #cc0000;
-      --red-bright: #ff1a00;
-      --red-dim: #5a0a0a;
-      --gold: #c8a800;
-      --gold-dim: #4a3d00;
-      --text: #f0eaee;
-      --text-muted: #7a6070;
-      --text-dim: #3a2830;
-      --header-bg: #050305;
+      --bg: #060a08;
+      --surface: #0a100d;
+      --surface2: #0f1812;
+      --border: #142018;
+      --border-light: #1e3028;
+      --cyan: #00e5ff;
+      --cyan-dim: #003a45;
+      --cyan-glow: rgba(0,229,255,0.15);
+      --amber: #ffaa00;
+      --amber-dim: #3a2800;
+      --green: #00e676;
+      --green-dim: #003820;
+      --magenta: #e040fb;
+      --text: #d0e8e0;
+      --text-muted: #3a6050;
+      --text-dim: #1a3028;
+      --header-bg: #040806;
       --gap: 20px;
       --pad: 24px;
       --radius: 0px;
@@ -31,13 +34,22 @@
     body {
       background: var(--bg);
       background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.012) 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.012) 40px);
+        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(0,229,255,0.03) 60px),
+        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(0,229,255,0.03) 60px);
       color: var(--text);
-      font-family: 'Barlow', sans-serif;
-      font-size: 13px;
-      font-weight: 300;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
       min-height: 100vh;
+    }
+
+    /* scanline overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 3px);
+      pointer-events: none;
+      z-index: 9999;
     }
 
     .page-wrap { max-width: 1440px; margin: 0 auto; }
@@ -45,66 +57,98 @@
     /* ── Header ── */
     header {
       background: var(--header-bg);
-      border-bottom: 3px solid var(--red);
+      border-bottom: 1px solid var(--border-light);
       padding: 0 var(--pad);
       display: flex;
       align-items: stretch;
-      gap: 0;
       position: sticky;
       top: 0;
       z-index: 100;
-      min-height: 64px;
+      min-height: 60px;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), var(--cyan), transparent);
+      opacity: 0.6;
     }
     .header-brand {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 4px;
-      padding: 14px 24px 14px 0;
+      gap: 3px;
+      padding: 12px 28px 12px 0;
       border-right: 1px solid var(--border-light);
+      margin-right: 28px;
     }
     header .logo {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: 'Rajdhani', sans-serif;
       font-weight: 700;
-      font-size: 28px;
-      letter-spacing: 6px;
-      color: var(--text);
+      font-size: 22px;
+      letter-spacing: 5px;
+      color: var(--cyan);
       text-transform: uppercase;
       white-space: nowrap;
+      text-shadow: 0 0 12px rgba(0,229,255,0.5);
     }
-    header .logo span { color: var(--red); }
-    @media (min-width: 600px) { header .logo { font-size: 34px; } }
+    @media (min-width: 600px) { header .logo { font-size: 26px; } }
     header .subtitle {
-      color: var(--text-muted);
-      font-family: 'Barlow', sans-serif;
+      font-family: 'Share Tech Mono', monospace;
       font-size: 9px;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      font-weight: 400;
+      color: var(--text-muted);
     }
+
+    /* header data boxes */
+    .hdr-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 20px;
+      border-right: 1px solid var(--border);
+      gap: 2px;
+    }
+    .hdr-box-label {
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .hdr-box-val {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      color: var(--amber);
+      letter-spacing: 1px;
+    }
+
     header .spacer { flex: 1; }
     header .status {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: 'Share Tech Mono', monospace;
       font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--red);
+      letter-spacing: 2px;
+      color: var(--green);
       display: flex;
       align-items: center;
       gap: 10px;
       padding-left: 24px;
       border-left: 1px solid var(--border-light);
+      text-shadow: 0 0 8px rgba(0,230,118,0.5);
     }
     header .status .dot {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--red);
-      box-shadow: 0 0 6px var(--red);
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
       animation: pulse 2s infinite;
       flex-shrink: 0;
     }
-    @keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 6px var(--red)} 50%{opacity:0.3;box-shadow:none} }
+    @keyframes pulse {
+      0%,100% { opacity:1; box-shadow: 0 0 8px var(--green); }
+      50%      { opacity:0.3; box-shadow: none; }
+    }
 
     /* ── Controls ── */
     .controls {
@@ -115,13 +159,12 @@
       flex-wrap: wrap;
       border-bottom: 1px solid var(--border);
       background: var(--surface);
-      min-height: 52px;
+      min-height: 48px;
     }
     .controls-label {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 3px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text-muted);
       display: flex;
@@ -130,40 +173,40 @@
     select#monthSelect {
       background: transparent;
       border: none;
-      border-bottom: 2px solid var(--red-dim);
-      color: var(--text);
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 16px;
-      font-weight: 500;
+      border-bottom: 1px solid var(--cyan-dim);
+      color: var(--cyan);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
       letter-spacing: 2px;
       text-transform: uppercase;
-      padding: 4px 28px 4px 0;
+      padding: 4px 24px 4px 0;
       outline: none;
       cursor: pointer;
       appearance: none;
       -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23cc0000'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%2300e5ff'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 4px center;
       transition: border-color 0.15s;
     }
-    select#monthSelect:focus { border-bottom-color: var(--red); }
-    select#monthSelect option { background: #0f0c0f; color: var(--text); }
+    select#monthSelect:focus { border-bottom-color: var(--cyan); }
+    select#monthSelect option { background: #0a100d; color: var(--text); }
 
     /* ── Section header ── */
     .section-header {
-      padding: calc(var(--gap) * 1.5) var(--pad) var(--gap);
+      padding: calc(var(--gap) * 1.2) var(--pad) calc(var(--gap) * 0.6);
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
     .section-title {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: 'Rajdhani', sans-serif;
       font-size: 11px;
       font-weight: 600;
       letter-spacing: 5px;
       text-transform: uppercase;
-      color: var(--red);
+      color: var(--cyan);
+      text-shadow: 0 0 8px rgba(0,229,255,0.4);
     }
     .section-rule {
       flex: 1;
@@ -171,7 +214,7 @@
       background: linear-gradient(90deg, var(--border-light), transparent);
     }
 
-    /* ── Charts ── */
+    /* ── Chart cards ── */
     .charts-section { padding: 0 var(--pad); display: flex; flex-direction: column; gap: var(--gap); }
     .charts-grid { display: grid; grid-template-columns: 1fr; gap: var(--gap); }
     @media (min-width: 700px) { .charts-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -179,53 +222,60 @@
     .chart-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-top: 2px solid var(--red-dim);
-      padding: 24px 22px 20px;
+      padding: 20px 20px 16px;
       position: relative;
-      transition: border-top-color 0.2s;
     }
-    .chart-card:hover { border-top-color: var(--red); }
+    /* corner reticles */
+    .chart-card::before, .chart-card::after {
+      content: '';
+      position: absolute;
+      width: 10px; height: 10px;
+      border-color: var(--cyan);
+      border-style: solid;
+      opacity: 0.5;
+    }
+    .chart-card::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+    .chart-card::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
 
     .chart-title {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 4px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 18px;
+      color: var(--cyan);
+      margin-bottom: 16px;
+      opacity: 0.7;
     }
     .donut-legend {
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      margin-top: 14px;
-      font-family: 'Barlow', sans-serif;
-      font-size: 11px;
-      font-weight: 400;
+      gap: 6px;
+      margin-top: 12px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
       color: var(--text-muted);
     }
-    .donut-legend span { display: flex; align-items: center; gap: 9px; }
-    .legend-swatch { width: 8px; height: 2px; flex-shrink: 0; }
+    .donut-legend span { display: flex; align-items: center; gap: 8px; }
+    .legend-swatch { width: 10px; height: 2px; flex-shrink: 0; }
     .donut-wrap { position: relative; width: 100%; height: 240px; }
     .bar-legend {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px 20px;
-      margin-top: 14px;
-      font-family: 'Barlow', sans-serif;
-      font-size: 10px;
-      letter-spacing: 0.5px;
+      gap: 6px 18px;
+      margin-top: 12px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1px;
       color: var(--text-muted);
     }
-    .bar-legend span { display: flex; align-items: center; gap: 7px; }
+    .bar-legend span { display: flex; align-items: center; gap: 6px; }
 
     /* ── Analytics ── */
     .analytics-section {
       padding: 0 var(--pad) calc(var(--gap) * 2);
       display: flex;
       flex-direction: column;
-      gap: calc(var(--gap) * 1.2);
+      gap: var(--gap);
     }
     .stat-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
     @media (min-width: 700px) { .stat-cards { grid-template-columns: repeat(5, 1fr); } }
@@ -233,40 +283,47 @@
     .stat-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-top: 2px solid var(--red-dim);
-      padding: 22px 18px 18px;
+      padding: 18px 16px 14px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       position: relative;
-      transition: border-top-color 0.2s;
-      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
     }
-    .stat-card:hover { border-top-color: var(--red); }
+    /* corner reticles on stat cards */
+    .stat-card::before, .stat-card::after {
+      content: '';
+      position: absolute;
+      width: 7px; height: 7px;
+      border-color: var(--cyan);
+      border-style: solid;
+      opacity: 0.35;
+    }
+    .stat-card::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+    .stat-card::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
 
     .stat-card .stat-label {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 3px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text-muted);
     }
     .stat-card .stat-value {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 44px;
-      font-weight: 300;
-      letter-spacing: 1px;
-      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 42px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--cyan);
       line-height: 1;
-      margin: 4px 0 2px;
+      margin: 2px 0;
+      text-shadow: 0 0 16px rgba(0,229,255,0.4);
     }
     .stat-card .stat-sub {
-      font-family: 'Barlow', sans-serif;
-      font-size: 10px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
       color: var(--text-dim);
       line-height: 1.6;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.5px;
     }
 
     /* ── Fun cards ── */
@@ -286,49 +343,45 @@
       justify-content: center;
       text-align: center;
       padding: 28px;
-      border: 1px solid;
+      border: 1px solid var(--border-light);
       width: 100%;
       max-width: 340px;
       position: relative;
+      background: var(--surface);
     }
-    .fun-card.earth { background: #0d080a; border-color: #5a1010; }
-    .fun-card.moon  { background: #0a0608; border-color: #4a0c0c; }
-    .fun-card.water { background: #080508; border-color: #3d0808; }
-    .fun-card.beach { background: #0c0808; border-color: #321005; }
     .fun-card .fun-glow {
-      position: absolute; width: 60%; height: 60%;
-      border-radius: 50%; opacity: 0.06; pointer-events: none;
+      position: absolute; width: 55%; height: 55%;
+      border-radius: 50%; opacity: 0.08; pointer-events: none;
+      background: var(--cyan);
     }
-    .fun-card.earth .fun-glow { background: #cc0000; }
-    .fun-card.moon  .fun-glow { background: #cc0000; }
-    .fun-card.water .fun-glow { background: #cc0000; }
-    .fun-card.beach .fun-glow { background: #c8a800; }
-    .fun-card .fun-emoji { font-size: 30px; line-height: 1; margin-bottom: 8px; position: relative; }
+    .fun-card.beach .fun-glow { background: var(--amber); }
+    .fun-card .fun-emoji { font-size: 28px; line-height: 1; margin-bottom: 6px; position: relative; }
     .fun-card .fun-number {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 42px;
-      font-weight: 300;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 40px;
+      font-weight: 600;
       letter-spacing: 1px;
       line-height: 1;
-      color: var(--red);
+      color: var(--cyan);
+      text-shadow: 0 0 12px rgba(0,229,255,0.4);
       position: relative;
     }
-    .fun-card.beach .fun-number { color: var(--gold); }
+    .fun-card.beach .fun-number { color: var(--amber); text-shadow: 0 0 12px rgba(255,170,0,0.4); }
     .fun-card .fun-headline {
-      font-family: 'Barlow', sans-serif;
-      font-size: 10px;
-      font-weight: 400;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
       letter-spacing: 1px;
-      color: #8a7880;
-      line-height: 1.6;
+      color: var(--text-muted);
+      line-height: 1.7;
       margin-top: 8px;
       position: relative;
+      text-transform: uppercase;
     }
     .fun-card .fun-detail {
-      font-family: 'Barlow', sans-serif;
+      font-family: 'Share Tech Mono', monospace;
       font-size: 9px;
-      color: #3a2830;
-      margin-top: 6px;
+      color: var(--text-dim);
+      margin-top: 4px;
       letter-spacing: 0.5px;
       line-height: 1.6;
       position: relative;
@@ -338,17 +391,16 @@
     .state-msg {
       padding: 80px 32px;
       text-align: center;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 18px;
-      font-weight: 300;
-      letter-spacing: 4px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 3px;
       text-transform: uppercase;
       color: var(--text-muted);
     }
     .spinner {
-      display: inline-block; width: 16px; height: 16px;
+      display: inline-block; width: 14px; height: 14px;
       border: 1px solid var(--border-light);
-      border-top-color: var(--red);
+      border-top-color: var(--cyan);
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       margin-right: 10px;
@@ -361,11 +413,23 @@
 <div class="page-wrap">
 <header>
   <div class="header-brand">
-    <div class="logo">Install <span>Recap</span></div>
-    <div class="subtitle">Irrigation &amp; Landscape Project Data</div>
+    <div class="logo">INST / RECAP</div>
+    <div class="subtitle">IRR &amp; LNDSCP · SYS DATA</div>
+  </div>
+  <div class="hdr-box">
+    <div class="hdr-box-label">DATE</div>
+    <div class="hdr-box-val" id="hdrDate">--/--/----</div>
+  </div>
+  <div class="hdr-box">
+    <div class="hdr-box-label">MODE</div>
+    <div class="hdr-box-val">ALL TIME</div>
+  </div>
+  <div class="hdr-box">
+    <div class="hdr-box-label">SRC</div>
+    <div class="hdr-box-val">GGL SHEETS</div>
   </div>
   <div class="spacer"></div>
-  <div class="status" id="statusEl"><div class="dot"></div><span>Loading</span></div>
+  <div class="status" id="statusEl"><div class="dot"></div><span>INITIALIZING</span></div>
 </header>
 
 <div class="controls">
@@ -374,7 +438,7 @@
 </div>
 
 <div class="section-header">
-  <span class="section-title">Distribution</span>
+  <span class="section-title">SYS·01 / DISTRIBUTION</span>
   <span class="section-rule"></span>
 </div>
 
@@ -397,7 +461,7 @@
     </div>
   </div>
   <div class="section-header" style="padding-left:0;padding-right:0;">
-    <span class="section-title">Cumulative Trends</span>
+    <span class="section-title">SYS·02 / CUMULATIVE TRENDS</span>
     <span class="section-rule"></span>
   </div>
   <div class="chart-card">
@@ -414,7 +478,7 @@
 
 <div id="analyticsOuter" style="display:none;">
 <div class="section-header">
-  <span class="section-title">By the Numbers</span>
+  <span class="section-title">SYS·03 / TELEMETRY</span>
   <span class="section-rule"></span>
   <span style="font-family:'Inter',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);">All time</span>
 </div>
@@ -806,7 +870,9 @@
     try {
       await fetchAllSheets();
       if (MONTHS.length === 0) throw new Error('No sheets found');
-      document.getElementById('statusEl').innerHTML = '<div class="dot"></div><span>LIVE — ' + new Date().toLocaleDateString() + '</span>';
+      const now = new Date();
+      document.getElementById('hdrDate').textContent = now.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});
+      document.getElementById('statusEl').innerHTML = '<div class="dot"></div><span>NOMINAL</span>';
     } catch(err) {
       console.error('Failed to load data:', err);
       document.getElementById('statusEl').innerHTML = '<span style="color:#f06060">⚠ ERROR</span>';
