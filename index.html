@@ -16,6 +16,7 @@
     @media (min-width: 900px) { :root { --gap: 24px; --pad: 32px; } }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; min-height: 100vh; }
+    .page-wrap { max-width: 1400px; margin: 0 auto; }
     header { background: var(--header-bg); border-bottom: 2px solid var(--accent); padding: 14px var(--pad); display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
     header .logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--accent); white-space: nowrap; }
     @media (min-width: 600px) { header .logo { font-size: 28px; } }
@@ -100,7 +101,7 @@
   </style>
 </head>
 <body>
-
+<div class="page-wrap">
 <header>
   <div>
     <div class="logo">INSTALL RECAP</div>
@@ -552,5 +553,6 @@
 
   init();
 </script>
+</div>
 </body>
 </html>
